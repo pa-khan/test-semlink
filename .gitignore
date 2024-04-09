@@ -1,4 +1,4 @@
 node_modules
 .vscode
 .idea
-src/shared
+**/src/shared
