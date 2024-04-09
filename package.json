@@ -1,0 +1,12 @@
+{
+  "name": "test-semlink",
+  "version": "1.0.0",
+  "main": "ln.js",
+  "scripts": {
+    "preinstall": "node ln.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

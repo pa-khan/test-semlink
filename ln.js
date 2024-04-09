@@ -1,4 +1,4 @@
-onst fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 // Функция для проверки существования символической или жесткой ссылки
@@ -64,8 +64,8 @@ function createLink(sourcePath, targetPath) {
 
 // Пути к папке shared и целевым папкам (backend и frontend)
 const sharedPath = path.join(__dirname, 'shared');
-const backendPath = path.join(__dirname, 'backend', 'shared');
-const frontendPath = path.join(__dirname, 'frontend', 'shared');
+const backendPath = path.join(__dirname, 'backend/src/shared');
+const frontendPath = path.join(__dirname, 'frontend/src/shared');
 
 // Создаем ссылку в проекте backend
 createLink(sharedPath, backendPath);
