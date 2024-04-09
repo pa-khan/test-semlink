@@ -1,23 +1,36 @@
-const fs = require('fs');
+onst fs = require('fs');
 const path = require('path');
+
+// Функция для проверки существования символической или жесткой ссылки
+function isLink(targetPath) {
+    try {
+        // Проверяем существует ли путь как символическая ссылка или директория (для Windows)
+        const stats = fs.lstatSync(targetPath);
+        return stats.isSymbolicLink() || stats.isDirectory(); // Для Windows также считаем директорию как ссылку
+    } catch (error) {
+        return false; // Если произошла ошибка, ссылка не существует
+    }
+}
 
 // Функция для удаления ссылки (символической или жесткой) в зависимости от ОС
 function removeLink(targetPath) {
-    if (process.platform === 'win32') {
-        // Для Windows удаляем жесткую ссылку
-        try {
-            fs.rmdirSync(targetPath, { recursive: true });
-        } catch (error) {
-            // Выводим сообщение об ошибке при удалении
-            console.error(`Error removing link: ${error}`);
-        }
-    } else {
-        // Для Linux/MacOS удаляем символическую ссылку
-        try {
-            fs.unlinkSync(targetPath);
-        } catch (error) {
-            // Выводим сообщение об ошибке при удалении
-            console.error(`Error removing symlink: ${error}`);
+    if (isLink(targetPath)) {
+        if (process.platform === 'win32') {
+            // Для Windows удаляем жесткую ссылку
+            try {
+                fs.rmdirSync(targetPath, { recursive: true });
+            } catch (error) {
+                // Выводим сообщение об ошибке при удалении
+                console.error(`Error removing link: ${error}`);
+            }
+        } else {
+            // Для Linux/MacOS удаляем символическую ссылку
+            try {
+                fs.unlinkSync(targetPath);
+            } catch (error) {
+                // Выводим сообщение об ошибке при удалении
+                console.error(`Error removing symlink: ${error}`);
+            }
         }
     }
 }
@@ -51,8 +64,8 @@ function createLink(sourcePath, targetPath) {
 
 // Пути к папке shared и целевым папкам (backend и frontend)
 const sharedPath = path.join(__dirname, 'shared');
-const backendPath = path.join(__dirname, 'backend', 'src/shared');
-const frontendPath = path.join(__dirname, 'frontend', 'src/shared');
+const backendPath = path.join(__dirname, 'backend', 'shared');
+const frontendPath = path.join(__dirname, 'frontend', 'shared');
 
 // Создаем ссылку в проекте backend
 createLink(sharedPath, backendPath);
